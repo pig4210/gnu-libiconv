@@ -1,0 +1,12 @@
+x64
+x86
+*.rar
+*.zip
+*.7z
+
+*.lib
+*.dll
+*.exe
+
+include
+libiconv*
