@@ -9,7 +9,7 @@ $(DSTPATH)/iconv.c : $(SRCPATH)/libiconv/lib/iconv.c | $(DSTPATH)
 #     替换 '@HAVE_VISIBILITY@' 为 '0' 。
 #     替换 '@DLL_VARIABLE@' 为 空 。
 #     替换 'ICONV_CONST' 为 'const' 。
-#     替换 '‘' '’' 为 ''' 。
+#     替换 '‘' '’' 为 ''' 。避免编译出现 warning 。
 $(DSTPATH)/iconv.h : $(SRCPATH)/libiconv/include/iconv.h.build.in | $(DSTPATH)
 	cd "$(DSTPATH)" && $(LUA) -e "local file = io.open([[$<]], 'r'); local ss = file:read('a'); file:close(); file = io.open([[$(@F)]], 'wb'); ss = ss:gsub('@HAVE_VISIBILITY@', '0'):gsub('@DLL_VARIABLE@', ''):gsub('ICONV_CONST', 'const'):gsub('@', ''):gsub('\xE2\x80\x98', '\''):gsub('\xE2\x80\x99', '\''); file:write(ss); file:close();"
 # relocatable.c 直接复制。
@@ -55,6 +55,7 @@ check_lib_files : \
 vpath %.c   $(DSTPATH)
 vpath %.h   $(DSTPATH)
 
+# 屏蔽多个四级告警。
 CFLAGS          += /I"$(DSTPATH)" /wd4018 /wd4090 /wd4100 /wd4127 /wd4189 /wd4206 /wd4244 /wd4245 /wd4267 /wd4311
 CFLAGS          += /D_CRT_SECURE_NO_WARNINGS
 
